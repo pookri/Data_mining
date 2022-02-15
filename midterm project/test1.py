@@ -1,4 +1,9 @@
 
+from typing import final
+import collections
+
+import apriori
+
 def create_combination(comb_size, item_data): 
     original_list= set()
     comb_data = []
@@ -42,12 +47,13 @@ def item_support(itemSupport):
         itemSupport1[i]=round(itemSupport[i]/20,2)
     return itemSupport1
 
+""" Giving you each item (single) in a dictionary """
 def list_of_keys(comb_size, newItemSupport_Dict):
     newList=[]
     if comb_size <= 2: 
         for key in newItemSupport_Dict:
             newList.append(key)
-    else:
+    else: # Generating single items to add to a list 
         for key in newItemSupport_Dict:
             key = key.replace("'", "")
             keyarr_tmp = key[1:len(key)-1].split(",")
@@ -80,11 +86,13 @@ def item_count(c_data,t_data):
     return itemDict2
 
 def remove_items(item_data):
-    minSupport=0.3
+    minSupport=0.24
     itemDict3={}
     for i in item_data:
         if(item_data[i]>=minSupport):
             itemDict3[i]=item_data[i]
+        else: 
+            all_removed_items.append(i)
     return itemDict3 
 
 db1=open('Transaction1.txt')
@@ -92,6 +100,8 @@ lines=[]
 transaction=[]
 itemDict = {}
 comb=2
+final_answer = {}
+all_removed_items = []
 
 i = 0
 for f in db1:
@@ -128,10 +138,66 @@ while len(itemDict) > 1:
     itemDict=remove_items(newItemSupport_Dict)
     print('itemDict after removing')
     print_itemSupport_table(itemDict)
+    final_answer.update(itemDict)
     comb=comb+1
     i=i+1
-print(itemDict)
+print('Printing final answer')
+print(final_answer)
+# print('Printing all removed items')
+# print(all_removed_items)
 
+"""Input: List of single items, Output: list permutation """
+def perm(data):
+    if len(data)==0:
+        yield []
+    elif len(data)==1:
+        yield data
+    else:
+        for i in range(len(data)):
+            x=data[i]
+            xs=data[:i] + data[i+1:]
+            for p in perm(xs):
+                yield [x]+p
+    
+
+
+def association(data):
+    retArr = []
+    def isDuplicate(left, right): 
+        for ra in retArr:
+            if collections.Counter(ra[0]) == collections.Counter(left) and collections.Counter(ra[1]) == collections.Counter(right):
+                return True
+        return False
+
+    for lt in range(len(data)):
+        listOfString = data[lt]
+        pointer = 1
+        for rt in range(len(listOfString)-1):
+            left = listOfString[:pointer]
+            right = listOfString[rt+1:]
+            #if len(retArr) > 0 and all(x in retArr[rt][0] for x in left) and all(y in retArr[rt][1] for y in right):
+            if len(retArr) > 0 and isDuplicate(left, right):
+                print('they both are already in ret list')
+            else: 
+                retArr.append([ left , right])
+            pointer = pointer +1
+
+    return retArr
+            
+
+final_list=list_of_keys(3,final_answer)
+print('Fianl_list')
+print(final_list)
+print("Permutations")
+eachPermList = []
+association_list=[]
+for each in final_list: 
+    for eachPerm in perm(each):
+        eachPermList.append(eachPerm)
+print(eachPermList)
+print('association_list')
+association_list=association(eachPermList)
+print(association_list)
 db1.close()
 
 
