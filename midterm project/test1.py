@@ -2,8 +2,6 @@
 from typing import final
 import collections
 
-import apriori
-
 def create_combination(comb_size, item_data): 
     original_list= set()
     comb_data = []
@@ -30,7 +28,6 @@ def create_combination(comb_size, item_data):
                 original_list.add(inner)
     return combination(comb_size, list(original_list), comb_data )
     
-
 def print_itemCount_table(itemDict):
     print("ITEM\t\tCOUNT")
     for i in itemDict:
@@ -86,7 +83,6 @@ def item_count(c_data,t_data):
     return itemDict2
 
 def remove_items(item_data):
-    minSupport=0.24
     itemDict3={}
     for i in item_data:
         if(item_data[i]>=minSupport):
@@ -94,57 +90,6 @@ def remove_items(item_data):
         else: 
             all_removed_items.append(i)
     return itemDict3 
-
-db1=open('Transaction1.txt')
-lines=[]
-transaction=[]
-itemDict = {}
-comb=2
-final_answer = {}
-all_removed_items = []
-
-i = 0
-for f in db1:
-    f = f.rstrip('\n')
-    transaction.append(f.split(","))
-    line = f.split(",")
-    for item in line: 
-        if (item in itemDict.keys()):
-            itemDict[item] = itemDict[item] + 1
-        else: 
-            itemDict[item] = 1
-
-newItemSupport_Dict=item_support(itemDict)
-itemDict=remove_items(newItemSupport_Dict)
-print(itemDict)
-comb=2
-i=1
-while len(itemDict) > 1:
-    midlist=[]
-    midlist=list_of_keys(comb, newItemSupport_Dict)
-    #print('midlist',i)
-    #for j in midlist:
-        #print(j)
-    combined_data=get_comb_data(comb,midlist)
-    #print('comb_ans',i)
-    #for j in combined_data:
-        #print (j)
-    itemDict=item_count(combined_data,transaction)
-    print('Count_Table: ',i)
-    print_itemCount_table(itemDict)
-    newItemSupport_Dict=item_support(itemDict)
-    print('Suppoer_Table: ',i)
-    print_itemSupport_table(newItemSupport_Dict)
-    itemDict=remove_items(newItemSupport_Dict)
-    print('itemDict after removing')
-    print_itemSupport_table(itemDict)
-    final_answer.update(itemDict)
-    comb=comb+1
-    i=i+1
-print('Printing final answer')
-print(final_answer)
-# print('Printing all removed items')
-# print(all_removed_items)
 
 """Input: List of single items, Output: list permutation """
 def perm(data):
@@ -159,8 +104,6 @@ def perm(data):
             for p in perm(xs):
                 yield [x]+p
     
-
-
 def association(data):
     retArr = []
     def isDuplicate(left, right): 
@@ -177,28 +120,123 @@ def association(data):
             right = listOfString[rt+1:]
             #if len(retArr) > 0 and all(x in retArr[rt][0] for x in left) and all(y in retArr[rt][1] for y in right):
             if len(retArr) > 0 and isDuplicate(left, right):
-                print('they both are already in ret list')
+                pass
+                #print('they both are already in ret list')
             else: 
                 retArr.append([ left , right])
             pointer = pointer +1
-
     return retArr
-            
+
+def generate_rules(associ_list):
+    final_ruleDict={}
+    for product in associ_list:
+        supp_dict={}
+        suppDict={}
+        mergelist=[j for i in zip(product[0],product[1]) for j in i]
+        suppDict=item_count([mergelist],transaction)
+        supp_dict=item_support(suppDict)
+        for i in supp_dict:            
+            suppValue1=supp_dict[i]
+        #print(suppValue1)
+        leftSide=','.join(product[0])
+        rightSide=','.join(product[1])
+        finalKey=leftSide+'->'+rightSide
+        final_ruleDict[finalKey]=[Calculate_confidence(product[0],product[1]),suppValue1]
+    print_itemCount_table(final_ruleDict)
+    return final_ruleDict
+
+def Calculate_confidence(left,right):
+    temp1=item_count([left],transaction)
+    merged_list = [j for i in zip(left,right) for j in i]
+    temp2=item_count([merged_list],transaction)
+    for i in temp1:
+        temp1Value=temp1[i]
+    for j in temp2:
+        temp2Value=temp2[j]
+    #print('temp',temp1Value)
+    confidence=temp2Value/temp1Value
+    return confidence #item_support(suppDict)
+
+def association_rules(finalDict):
+    rule_dict={}
+    for rule in finalDict:
+        confiList=finalDict[rule]
+        if confiList[0] >= minConfidence:
+            rule_dict[rule]=finalDict[rule] 
+    return rule_dict
+
+db1=open('Transaction1.txt')
+lines=[]
+transaction=[]
+itemDict = {}
+comb=2
+final_answer = {}
+all_removed_items = []
+minConfidence=float(input('Enter minimum Confidence:'))
+minSupport=float(input('Enter minimum Support:'))
+for f in db1:
+    f = f.rstrip('\n')
+    transaction.append(f.split(","))
+    line = f.split(",")
+    for item in line: 
+        if (item in itemDict.keys()):
+            itemDict[item] = itemDict[item] + 1
+        else: 
+            itemDict[item] = 1
+
+newItemSupport_Dict=item_support(itemDict)
+itemDict=remove_items(newItemSupport_Dict)
+#print(itemDict)
+comb=2
+cnt=1
+while len(itemDict) > 1:
+    midlist=[]
+    midlist=list_of_keys(comb, newItemSupport_Dict)
+    combined_data=get_comb_data(comb,midlist)
+    itemDict=item_count(combined_data,transaction)
+    newItemSupport_Dict=item_support(itemDict)
+    itemDict=remove_items(newItemSupport_Dict)
+    final_answer.update(itemDict)
+    comb=comb+1
+    cnt=cnt+1
+print('Printing final answer')
+print(final_answer)
+# print('Printing all removed items')
+# print(all_removed_items)
 
 final_list=list_of_keys(3,final_answer)
-print('Fianl_list')
+print('Frequent item set')
 print(final_list)
-print("Permutations")
 eachPermList = []
 association_list=[]
 for each in final_list: 
     for eachPerm in perm(each):
         eachPermList.append(eachPerm)
-print(eachPermList)
 print('association_list')
 association_list=association(eachPermList)
 print(association_list)
+ruleDict=generate_rules(association_list)
+final_ruleDict=association_rules(ruleDict)
+print_itemCount_table(final_ruleDict)
 db1.close()
 
 
 
+
+
+"""
+
+
+def left_right_count(p_list,ass_list):
+    temp={}
+    temp1={}
+    for key in ass_list:
+        print(key[0])
+        j=key[0]
+        temp1.update(item_count([j],transaction))
+    print_itemCount_table(temp1)
+    temp=item_count(p_list,transaction)
+    print_itemCount_table(temp)
+    return temp,temp1
+
+"""
