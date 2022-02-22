@@ -1,0 +1,20 @@
+Baby Diapers,Baby wipes,Diaper bag,Portable playard
+Face cream,Body scrub,Winter gloves
+Face cream,Body scrub
+Baby Diapers,Baby wipes
+Water bottle for kids,Portable playard,Burp clothes,Forehead thermometer
+Baby Diapers,Baby wipes,Burp clothes,Forehead thermometer
+Mascara makeup,Face wash,Face cream
+Water bottle for kids,Baby Diapers,Baby wipes
+Burp clothes,Forehead thermometer
+Hair dryer,Face cream,Body scrub
+Shoes,Wallet
+Portable playard,Shoes,Wallet
+Hair dryer,Baby Diapers,Baby wipes
+Face cream,Body scrub,Winter gloves,Water bottle for kids
+Face cream,Winter gloves
+Body scrub,Winter gloves
+Baby Diapers,Diaper bag,Portable playard
+Face cream,Body scrub,Winter gloves,Hair dryer
+Baby Diapers,Baby wipes
+Baby wipes,Diaper bag

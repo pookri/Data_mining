@@ -162,7 +162,7 @@ def association_rules(finalDict):
             rule_dict[rule]=finalDict[rule] 
     return rule_dict
 
-db1=open('Transaction1.txt')
+db1=open('Transaction3.txt')
 lines=[]
 transaction=[]
 itemDict = {}
