@@ -1,5 +1,4 @@
 
-
 import time
 from typing import final
 #import tabulate
@@ -158,8 +157,9 @@ def association_rules(finalDict):
     rule_dict={}
     for rule in finalDict:
         confiList=finalDict[rule]
-        if confiList[0] >= minConfidence:
-            rule_dict[rule]=finalDict[rule] 
+        if confiList[1] >= minSupport:
+            if confiList[0] >= minConfidence:
+                rule_dict[rule]=finalDict[rule] 
     return rule_dict
 
 db1=open('Transaction1.txt')
@@ -183,19 +183,19 @@ for f in db1:
             itemDict[item] = 1
 
 newItemSupport_Dict=item_support(itemDict)
-itemDict=remove_items(newItemSupport_Dict)
+#itemDict=remove_items(newItemSupport_Dict)
 print('transaction',transaction)
 print('itemDict')
 print(itemDict)
 comb=2
 cnt=1
-while len(itemDict) > 1:
+while len(newItemSupport_Dict) > 1:
     midlist=[]
-    midlist=list_of_keys(comb, itemDict)
+    midlist=list_of_keys(comb, newItemSupport_Dict)
     combined_data=get_comb_data(comb,midlist)
     itemDict=item_count(combined_data,transaction)
     newItemSupport_Dict=item_support(itemDict)
-    itemDict=remove_items(newItemSupport_Dict)
+    #itemDict=remove_items(newItemSupport_Dict)
     final_answer.update(itemDict)
     comb=comb+1
     cnt=cnt+1
@@ -220,7 +220,7 @@ final_ruleDict=association_rules(ruleDict)
 print_itemCount_table(final_ruleDict)
 db1.close()
 endtime=time.time()
-print("Time taken by Apriori Algorithm:",endtime-starttime)
+print("Time taken by brute force:",endtime-starttime)
 
 
 

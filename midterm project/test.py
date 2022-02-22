@@ -28,13 +28,23 @@ def create_combination(comb_size, item_data):
 
 def print_itemCount_table(itemDict):
     print("ITEM\t\tCOUNT")
-    for i in itemDict:
-        print("{}\t\t{}".format(i,itemDict[i]))
+    print ("{:<50} {:<10}".format('ITEM', 'COUNT'))
+# print each data item.
+    for key, value in itemDict.items():
+        count = value
+        print ("{:<50} {:<10}".format(key, count))
+    #for i in itemDict:
+        #print("{}\t\t{}".format(i,itemDict[i]))
 
 def print_itemSupport_table(itemDict):
     print("ITEM\t\tSUPPORT")
-    for i in itemDict:
-        print("{}\t\t{}".format(i,itemDict[i]))
+    for each_row in zip(*([i] + (j)
+                      for i, j in itemDict.items())):
+     
+      print(*each_row, " ")
+    #for i in itemDict:
+        #print("{}\t\t{}".format(i,itemDict[i]))
+    
 
 def item_support(itemSupport):
     itemSupport1={}
@@ -103,10 +113,10 @@ for f in db1:
             itemDict[item] = itemDict[item] + 1
         else: 
             itemDict[item] = 1
-
+print_itemCount_table(itemDict)
 newItemSupport_Dict=item_support(itemDict)
 itemDict=remove_items(newItemSupport_Dict)
-print(itemDict)
+
 comb=2
 i=1
 while len(itemDict) > 1:
@@ -137,6 +147,11 @@ db1.close()
 
 
 """
+
+for k, v in itemDict.items():
+        lang, perc, change = v
+        print ("{:<8} {:<15} {:<10} {:<10}".format(k, lang, perc, change))
+
 
 from typing import final
 import collections
