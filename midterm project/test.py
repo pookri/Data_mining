@@ -28,20 +28,16 @@ def create_combination(comb_size, item_data):
 
 def print_itemCount_table(itemDict):
     print("ITEM\t\tCOUNT")
-    print ("{:<50} {:<10}".format('ITEM', 'COUNT'))
+    print ("{:<50} {:<10} {:<10}".format('ITEM', 'CONFIDENCE','SUPPORT'))
 # print each data item.
     for key, value in itemDict.items():
-        count = value
-        print ("{:<50} {:<10}".format(key, count))
+        conf,supp = value
+        print ("{:<50} {:<10} {:<10}".format(key, conf,supp))
     #for i in itemDict:
         #print("{}\t\t{}".format(i,itemDict[i]))
 
 def print_itemSupport_table(itemDict):
     print("ITEM\t\tSUPPORT")
-    for each_row in zip(*([i] + (j)
-                      for i, j in itemDict.items())):
-     
-      print(*each_row, " ")
     #for i in itemDict:
         #print("{}\t\t{}".format(i,itemDict[i]))
     
@@ -147,6 +143,8 @@ db1.close()
 
 
 """
+
+ #if len(retArr) > 0 and all(x in retArr[rt][0] for x in left) and all(y in retArr[rt][1] for y in right):
 
 for k, v in itemDict.items():
         lang, perc, change = v

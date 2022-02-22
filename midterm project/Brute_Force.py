@@ -1,7 +1,4 @@
-
 import time
-from typing import final
-#import tabulate
 import collections
 
 def create_combination(comb_size, item_data): 
@@ -31,14 +28,18 @@ def create_combination(comb_size, item_data):
     return combination(comb_size, list(original_list), comb_data )
     
 def print_itemCount_table(itemDict):
-    print("ITEM\t\t\tCOUNT")
-    for i in itemDict:
-        print("{}\t\t{}".format(i,itemDict[i]))
+    print ("{:<90} {:<10}".format('ITEM', 'COUNT'))
+    print("\n")
+    for key, value in itemDict.items():
+        count= value
+        print ("{:<90} {:<10}".format(key, count))
 
-def print_itemSupport_table(itemDict):
-    print("ITEM\t\t\tSUPPORT")
-    for i in itemDict:
-        print("{}\t\t{}".format(i,itemDict[i]))
+def print_itemRule_table(itemDict):
+    print ("{:<50} {:<20} {:<20}".format('ITEM', 'CONFIDENCE','SUPPORT'))
+    print("\n")
+    for key, value in itemDict.items():
+        conf,supp = value
+        print ("{:<50} {:<20} {:<20}".format(key, conf,supp))
 
 def item_support(itemSupport):
     itemSupport1={}
@@ -119,10 +120,8 @@ def association(data):
         for rt in range(len(listOfString)-1):
             left = listOfString[:pointer]
             right = listOfString[rt+1:]
-            #if len(retArr) > 0 and all(x in retArr[rt][0] for x in left) and all(y in retArr[rt][1] for y in right):
             if len(retArr) > 0 and isDuplicate(left, right):
                 pass
-                #print('they both are already in ret list')
             else: 
                 retArr.append([ left , right])
             pointer = pointer +1
@@ -135,12 +134,10 @@ def generate_rules(associ_list):
         supp_dict=item_support(item_count([product[0]+product[1]],transaction))
         for i in supp_dict:            
             suppValue1=supp_dict[i]
-        #print(suppValue1)
         leftSide=','.join(product[0])
         rightSide=','.join(product[1])
         finalKey=leftSide+' -> '+rightSide
         final_ruleDict[finalKey]=[Calculate_confidence(product[0],product[1]),suppValue1]
-    #print_itemCount_table(final_ruleDict)
     return final_ruleDict
 
 def Calculate_confidence(left,right):
@@ -150,7 +147,7 @@ def Calculate_confidence(left,right):
         temp1Value=temp1[i]
     for j in temp2:
         temp2Value=temp2[j]
-    confidence=temp2Value/temp1Value
+    confidence=round((temp2Value/temp1Value),2)
     return confidence 
 
 def association_rules(finalDict):
@@ -165,8 +162,11 @@ def association_rules(finalDict):
 db1=open('Transaction3.txt')
 lines=[]
 transaction=[]
+eachPermList = []
+association_list=[]
 itemDict = {}
 comb=2
+cnt=1
 final_answer = {}
 all_removed_items = []
 minConfidence=float(input('Enter minimum Confidence:'))
@@ -183,61 +183,41 @@ for f in db1:
             itemDict[item] = 1
 
 newItemSupport_Dict=item_support(itemDict)
-#itemDict=remove_items(newItemSupport_Dict)
-print('transaction',transaction)
-print('itemDict')
-print(itemDict)
-comb=2
-cnt=1
+print("\nTransactions\n")
+print("____________\n")
+for tran in transaction:
+    print(tran)
+
 while len(newItemSupport_Dict) > 1:
     midlist=[]
     midlist=list_of_keys(comb, newItemSupport_Dict)
     combined_data=get_comb_data(comb,midlist)
     itemDict=item_count(combined_data,transaction)
     newItemSupport_Dict=item_support(itemDict)
-    #itemDict=remove_items(newItemSupport_Dict)
     final_answer.update(itemDict)
     comb=comb+1
     cnt=cnt+1
-print('Printing final answer')
-print(final_answer)
-# print('Printing all removed items')
-# print(all_removed_items)
 
 final_list=list_of_keys(3,final_answer)
-print('Frequent item set')
-print(final_list)
-eachPermList = []
-association_list=[]
+print('\nFrequent item set\n')
+print("_________________\n")
+for tran1 in final_list:
+    print(tran1)
+
 for each in final_list: 
     for eachPerm in perm(each):
         eachPermList.append(eachPerm)
-print('association_list')
+
 association_list=association(eachPermList)
-print(association_list)
 ruleDict=generate_rules(association_list)
 final_ruleDict=association_rules(ruleDict)
-print_itemCount_table(final_ruleDict)
+
+print("\nAssociation Rules:")
+print("\n___________________\n")
+print_itemRule_table(final_ruleDict)
+
 db1.close()
 endtime=time.time()
-print("Time taken by brute force:",endtime-starttime)
 
+print("\nTime taken by brute force:",endtime-starttime)
 
-
-
-"""
-
-
-def left_right_count(p_list,ass_list):
-    temp={}
-    temp1={}
-    for key in ass_list:
-        print(key[0])
-        j=key[0]
-        temp1.update(item_count([j],transaction))
-    print_itemCount_table(temp1)
-    temp=item_count(p_list,transaction)
-    print_itemCount_table(temp)
-    return temp,temp1
-
-"""
