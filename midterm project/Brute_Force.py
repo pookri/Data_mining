@@ -1,5 +1,6 @@
 import time
 import collections
+import os
 
 def create_combination(comb_size, item_data): 
     original_list= set()
@@ -84,15 +85,6 @@ def item_count(c_data,t_data):
                     itemDict2[item2] = 1
     return itemDict2
 
-def remove_items(item_data):
-    itemDict3={}
-    for i in item_data:
-        if(item_data[i]>=minSupport):
-            itemDict3[i]=item_data[i]
-        else: 
-            all_removed_items.append(i)
-    return itemDict3 
-
 """Input: List of single items, Output: list permutation """
 def perm(data):
     if len(data)==0:
@@ -127,7 +119,7 @@ def association(data):
             pointer = pointer +1
     return retArr
 
-def generate_rules(associ_list):
+def generate_rules(associ_list,transaction):
     final_ruleDict={}
     for product in associ_list:
         supp_dict={}
@@ -137,10 +129,10 @@ def generate_rules(associ_list):
         leftSide=','.join(product[0])
         rightSide=','.join(product[1])
         finalKey=leftSide+' -> '+rightSide
-        final_ruleDict[finalKey]=[Calculate_confidence(product[0],product[1]),suppValue1]
+        final_ruleDict[finalKey]=[Calculate_confidence(product[0],product[1],transaction),suppValue1]
     return final_ruleDict
 
-def Calculate_confidence(left,right):
+def Calculate_confidence(left,right,transaction):
     temp1=item_count([left],transaction) 
     temp2=item_count([left+right],transaction)
     for i in temp1:
@@ -159,7 +151,81 @@ def association_rules(finalDict):
                 rule_dict[rule]=finalDict[rule] 
     return rule_dict
 
-db1=open('Transaction3.txt')
+def Start_Program(Database):
+    transaction=[]
+    eachPermList = []
+    association_list=[]
+    itemDict = {}
+    comb=2
+    cnt=1
+    final_answer = {}
+    starttime=time.time()
+    for f in Database:
+        f = f.rstrip('\n')
+        transaction.append(f.split(","))
+        line = f.split(",")
+        for item in line: 
+            if (item in itemDict.keys()):
+                itemDict[item] = itemDict[item] + 1
+            else: 
+                itemDict[item] = 1
+
+    print("\nTransactions\n")
+    print("____________\n")
+    for tran in transaction:
+        print(tran)
+    
+    newItemSupport_Dict=item_support(itemDict)
+
+    while len(itemDict) > 1:
+        midlist=[]
+        midlist=list_of_keys(comb, newItemSupport_Dict)
+        combined_data=get_comb_data(comb,midlist)
+        itemDict=item_count(combined_data,transaction)
+        newItemSupport_Dict=item_support(itemDict)
+        final_answer.update(itemDict)
+        comb=comb+1
+        cnt=cnt+1
+
+    final_list=list_of_keys(3,final_answer)
+    print('\nFrequent item set\n')
+    print("_________________\n")
+    for tran1 in final_list:
+        print(tran1)
+
+    for each in final_list: 
+        for eachPerm in perm(each):
+            eachPermList.append(eachPerm)
+
+    association_list=association(eachPermList)
+    ruleDict=generate_rules(association_list,transaction)
+    final_ruleDict=association_rules(ruleDict)
+    print("\nAssociation Rules:")
+    print("\n___________________\n")
+    print_itemRule_table(final_ruleDict)
+
+    Database.close()
+    endtime=time.time()
+    print("\nTime taken by Apriori Algorithm:",endtime-starttime)
+
+
+directory='Input Files'
+i=1
+all_removed_items=[]
+for filename in os.listdir(directory):
+    db = os.path.join(directory, filename)
+    minConfidence=float(input('\nEnter minimum Confidence:'))
+    minSupport=float(input('Enter minimum Support:'))
+    print('\nDatabase',i)
+    print('\n_______\n')
+    Start_Program(open(db))
+    i=i+1
+
+
+
+
+"""
+db1=open('Transaction4.txt')
 lines=[]
 transaction=[]
 eachPermList = []
@@ -221,3 +287,4 @@ endtime=time.time()
 
 print("\nTime taken by brute force:",endtime-starttime)
 
+"""

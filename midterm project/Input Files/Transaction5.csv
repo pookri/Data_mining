@@ -1,0 +1,20 @@
+Whole Milk,Sugar,Eggs,Flour,Chocolate Chips
+Whole Milk,Sugar,Eggs,Flour,Bread,Nutella,Juice
+Whole Milk,Sugar,Eggs,Flour,Chocolate Chips,Coffee
+Whole Milk,Sugar,Eggs,Flour,Chocolate Chips,Cookies
+Whole Milk,Sugar,Eggs,Flour,Chocolate Chips,Cookies,Coffee
+Bread,Nutella,Juice,Cookies
+Bread,Nutella,Juice,Cookies,Whole Milk,Sugar,Eggs,Flour
+Cookies,Bacon,Bagel,Wine,Beer,Champagne
+Bread,Nutella,Juice,Cookies,Bacon,Bagel,Wine,Beer,Champagne
+Cookies,Wine,Beer,Champagne
+Whole Milk,Sugar,Eggs,Flour,Chocolate Chips,Cookies,Wine,Beer,Champagne
+Bread,Nutella,Juice,Cookies,Wine,Beer,Champagne
+Bacon,Bagel,Wine,Beer,Champagne
+Bacon,Bagel,Wine,Beer,Champagne,Cookies
+Whole Milk,Sugar,Coffee,Bread,Nutella,Juice
+Whole Milk,Sugar,Coffee,Cookies
+Whole Milk,Sugar,Coffee,Cookies,Wine,Beer,Champagne
+Whole Milk,Sugar,Coffee,Cookies,Wine,Beer,Champagne,Bacon,Bagel
+Bacon,Bagel,Whole Milk,Sugar,Coffee
+Bacon,Bagel,Bread,Nutella,Juice

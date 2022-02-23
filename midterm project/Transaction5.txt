@@ -1,0 +1,21 @@
+Whole Milk,Protein Shake,Eggs,Walnuts
+Protein Shake,Eggs,Walnuts,Toast,Nutella
+Bacon,Champagne,Protein Shake,Eggs,Toast,Nutella
+Bagel,Cream Cheese,Bacon,Champagne
+Bagel,Cream Cheese,Toast,Nutella,Champagne
+Whole Milk,Protein Shake,Eggs,Walnuts,Cereal
+Bagel,Cream Cheese,Toast,Nutella,Champagne
+Bacon,Champagne,Toast,Nutella
+Bagel,Cream Cheese,Bacon,Champagne,Walnuts
+Walnuts,Cereal,Whole Milk,Toast,Nutella
+Whole Milk,Protein Shake,Eggs,Cereal,Toast,Nutella
+Bagel,Cream Cheese,Champagne,Toast,Nutella
+Bagel,Cream Cheese,Bacon,Champagne,Toast,Nutella
+Whole Milk,Protein Shake,Eggs,Cereal
+Whole Milk,Protein Shake,Eggs,Cereal,Walnuts
+Bagel,Cream Cheese,Champagne,Whole Milk,Cereal
+Bagel,Cream Cheese,Champagne,Whole Milk,Cereal,Walnuts
+Whole Milk,Cereal,Walnuts,Bacon,Champagne
+Bacon,Champagne,Whole Milk,Protein Shake,Eggs
+Whole Milk,Protein Shake,Eggs,Cereal,Toast,Nutella
+
